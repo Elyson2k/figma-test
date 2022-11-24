@@ -29,5 +29,14 @@ public class TrabalhadorDtoPOST implements Serializable{
 	private String cpf;
 	
 	private Integer cargoId;
-	
+
+	@Override
+	public String toString() {
+		return "TrabalhadorDtoPOST{" +
+				"name='" + name + '\'' +
+				", email='" + email + '\'' +
+				", cpf='" + cpf + '\'' +
+				", cargoId=" + cargoId +
+				'}';
+	}
 }

@@ -7,32 +7,42 @@ import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.project.figma.entities.Cargo;
-import com.project.figma.entities.Trabalhador;
+import com.project.figma.entities.model.Cargo;
+import com.project.figma.entities.model.Trabalhador;
 import com.project.figma.entities.dto.TrabalhadorDtoPOST;
 import com.project.figma.repository.TrabalhadorRepository;
 
 @Service
 public class TrabalhadorService {
-	
-	@Autowired
-	private TrabalhadorRepository repository;
-	@Autowired
-	private CargoService cargoService;
-	
+
+	private final TrabalhadorRepository repository;
+	private final CargoService cargoService;
+
+	public TrabalhadorService(TrabalhadorRepository repository, CargoService cargoService) {
+		this.repository = repository;
+		this.cargoService = cargoService;
+	}
+
 	public Trabalhador find(Integer id) {
 		Optional<Trabalhador> obj = repository.findById(id);
 		return obj.orElseThrow( () -> new ObjectNotFoundException("ERROR: ID não cadastrado no sistema.", null) );
 	}
 	
 	public List<Trabalhador> findAll(){
-		List<Trabalhador> obj = repository.findAll();
-		return obj;
+		var trabalhadores = repository.findAll();
+		return trabalhadores;
 	}
 	
-	public Trabalhador insert(Trabalhador obj) {
-		obj.setId(null);
-		return repository.save(obj);
+	public Trabalhador insert(TrabalhadorDtoPOST novoTrabalhador) {
+		var cargo = cargoService.find(novoTrabalhador.getCargoId());
+		Trabalhador trabalhador = new Trabalhador();
+		trabalhador.setId(null)
+				.setCargo(cargo)
+				.setSetor(cargo.getSetor())
+				.setCpf(novoTrabalhador.getCpf())
+				.setEmail(novoTrabalhador.getEmail())
+				.setName(novoTrabalhador.getName());
+		return repository.save(trabalhador);
 	}
 	
 	public void delete(Integer id) {

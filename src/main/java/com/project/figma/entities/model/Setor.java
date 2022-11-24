@@ -1,15 +1,19 @@
-package com.project.figma.entities;
+package com.project.figma.entities.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,30 +22,35 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "CARGO")
-public class Cargo implements Serializable{
+@Table(name = "SETOR")
+public class Setor implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(unique = true)
 	private String name;
 	
-	@ManyToOne
-	@JoinColumn(name = "SETOR_ID")
-	private Setor setor;
-	
-	public Cargo(Integer id, String name, Setor setor) {
+	@JsonIgnore
+	@OneToMany(mappedBy = "setor")
+	private List<Cargo> cargos = new ArrayList<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "setor")
+	private List<Trabalhador> trabalhadores = new ArrayList<>();
+
+	public Setor(Integer id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.setor = setor;
 	}
 	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -50,10 +59,8 @@ public class Cargo implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cargo other = (Cargo) obj;
+		Setor other = (Setor) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 	
 }

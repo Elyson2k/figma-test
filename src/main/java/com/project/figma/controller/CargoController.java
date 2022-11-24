@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,18 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.project.figma.entities.Cargo;
+import com.project.figma.entities.model.Cargo;
 import com.project.figma.entities.dto.CargoDtoPOST;
 import com.project.figma.service.CargoService;
 
 @RestController
 @RequestMapping(value = "/api/v1/cargos")
 public class CargoController {
+	private final CargoService service;
+	public CargoController(CargoService service) {
+		this.service = service;
+	}
 
-	@Autowired
-	private CargoService service;
-	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Cargo> find(@PathVariable Integer id){
 		Cargo obj = service.find(id);

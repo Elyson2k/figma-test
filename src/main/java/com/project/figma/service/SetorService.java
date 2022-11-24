@@ -7,7 +7,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.project.figma.entities.Setor;
+import com.project.figma.entities.model.Setor;
 import com.project.figma.entities.dto.SetorDtoPOST;
 import com.project.figma.repository.SetorRepository;
 

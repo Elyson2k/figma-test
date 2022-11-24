@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.project.figma.entities.Setor;
+import com.project.figma.entities.model.Setor;
 import com.project.figma.entities.dto.SetorDtoPOST;
 import com.project.figma.service.SetorService;
 

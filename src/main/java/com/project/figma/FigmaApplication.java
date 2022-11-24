@@ -7,8 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.project.figma.entities.Cargo;
-import com.project.figma.entities.Setor;
+import com.project.figma.entities.model.Cargo;
+import com.project.figma.entities.model.Setor;
 import com.project.figma.repository.CargoRepository;
 import com.project.figma.repository.SetorRepository;
 
