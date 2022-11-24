@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,14 +28,18 @@ public class Setor implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue( strategy = GenerationType.IDENTITY)
+	@GeneratedValue( strategy = GenerationType.AUTO)
 	private Integer id;
 	@Column(unique = true)
 	private String name;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "setor")
+	@OneToMany(mappedBy = "setor", cascade = CascadeType.ALL)
 	private List<Cargo> cargos = new ArrayList<>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "setor", cascade = CascadeType.ALL)
+	private List<Trabalhador> trabalhadores = new ArrayList<>();
 
 	public Setor(Integer id, String name) {
 		super();

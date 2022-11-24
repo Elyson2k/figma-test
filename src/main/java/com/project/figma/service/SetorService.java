@@ -2,12 +2,13 @@ package com.project.figma.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.figma.entities.Setor;
+import com.project.figma.entities.dto.SetorDTO;
 import com.project.figma.entities.dto.SetorDtoPOST;
 import com.project.figma.repository.SetorRepository;
 
@@ -17,33 +18,44 @@ public class SetorService {
 	@Autowired
 	private SetorRepository repository;
 	
-	public Setor find(Integer id) {
+	public SetorDTO find(Integer id) {
 		Optional<Setor> obj = repository.findById(id);
-		return obj.orElseThrow( () -> new ObjectNotFoundException("ERROR: ID não cadastrado no sistema.", null) );
+		Setor newObj = obj.orElseThrow( () -> new com.project.figma.service.exceptions.ObjectNotFoundException("ERROR: ID não cadastrado no sistema.") );
+		return new SetorDTO(newObj);
 	}
 	
-	public List<Setor> findAll(){
+	public List<SetorDTO> findAll(){
 		List<Setor> obj = repository.findAll();
-		return obj;
+		return obj.stream().map(SetorDTO::new).collect(Collectors.toList());
 	}
 	
 	public void delete(Integer id) {
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		} catch (RuntimeException e) {
+			throw new com.project.figma.service.exceptions.DataIntegrityViolationException("ERROR: Não foi possivel excluir esse dado.");
+		}
 	}
 	
-	public Setor inserSetor(Setor obj) {
-		obj.setId(null);
-		return repository.save(obj);	
+	public Setor inserSetor(SetorDtoPOST obj) {
+		Setor newObj = new Setor();
+		newObj.setName(obj.getName());
+		repository.save(newObj);
+		return newObj;
 	}
 	
+	public Setor update(SetorDTO obj) {
+		var newObj = repository.findById(obj.getId());
+		updateData(newObj, obj);
+		return repository.save(newObj.get());
+	}
 	
 	// =========================================================================
 	//                         FUNÇÂO / METODOS
 	// =========================================================================
 	
-	public Setor fromDto(SetorDtoPOST obj) {
-		Setor s1 = new Setor(null, obj.getName());
-		return s1;
+	public void updateData(Optional<Setor> obj, SetorDTO objPass) {
+		obj.get().setName(objPass.getName());
 	}
 	
 }
